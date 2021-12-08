@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import axios  from "axios";
-import {setUserSession} from ',/Utils/Common';
+import {setUserSession} from './Utils/Common';
 
 function Login(props){
     const username = useFormInput('');
@@ -12,7 +12,7 @@ function Login(props){
     const HandleLogin = () => {
         setError(null);
         setLoading(true);
-        axios.post('http://localhost:4000/users/signin', { username: username.value, password: password.value }).then(response => {
+        axios.post('http://localhost:3000/users/signin', { username: username.value, password: password.value }).then(response => {
             setLoading(false);
             setUserSession(response.data.token, response.data.user);
             props.history.push ('/dashboard');

@@ -1,12 +1,12 @@
 require('dotenv').config();
 
-const express = require ('express');
-const cors = require('cors');
-const bodyParser = require ('body-parser');
-const jwt = require('jsonwebtoken');
-const utils = require('./utils');
+import express from 'express';
+import cors from 'cors';
+import { json, urlencoded } from 'body-parser';
+import { verify } from 'jsonwebtoken';
+import { generateToken, getCleanUser } from './utils';
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 3000;
 
 //Static user details
 const userData = {
@@ -20,9 +20,9 @@ const userData = {
 //enable CORS
 app.use(cors());
 //parse application/json
-app.use(bodyParser.json());
+app.use(json());
 //parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true}));
+app.use(urlencoded({ extended: true}));
 
 //middeware checks if jwt token exists, verifies it and 
 //helps to know if the request is authenticated or not.
@@ -31,7 +31,7 @@ app.use(function (req, res, next) {
     if (!token) return next(); //if no token, next
 
     token = token.replace('bearer ','');
-    jwt.verify(token.replace, process.env.JWT_SECRET, function (err, user){
+    verify(token.replace, process.env.JWT_SECRET, function (err, user){
         if(err){
             return res.status(401).json({
                 error: true,
@@ -74,9 +74,9 @@ app.post('/users/signin', function (req, res) {
         });
     }
     // generate token
-    const token = utils.generateToken(userData);
+    const token = generateToken(userData);
     // get basic user details
-    const userObj = utils.getCleanUser(userData);
+    const userObj = getCleanUser(userData);
     // return the token along with user details
     return res.json({ user: userObj, token });
 });
@@ -92,7 +92,7 @@ app.get('/verifyToken', function (req, res) {
         });
     }
     // check token that was passed by decoding token using secret
-    jwt.verify(token, process.env.JWT_SECRET, function (err, user) {
+    verify(token, process.env.JWT_SECRET, function (err, user) {
         if (err) return res.status(401).json({
             error: true,
             message: "Invalid token."
@@ -105,7 +105,7 @@ app.get('/verifyToken', function (req, res) {
             });
         }
         // get basic user details
-        var userObj = utils.getCleanUser(userData);
+        var userObj = getCleanUser(userData);
         return res.json({ user: userObj, token });
     });
 });
