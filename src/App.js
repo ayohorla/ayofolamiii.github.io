@@ -1,5 +1,6 @@
-import React from 'react';
-import { BrowserRouter, Switch, Route, NavLink } from 'react-router-dom';
+import {React, useState, useEffect} from 'react';
+import axios from 'axios';
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import './App.css';
 import PrivateRoute from './Utils/PrivateRoute';
 import PublicRoute from './Utils/PublicRoute';
@@ -32,8 +33,8 @@ function App() {
   }
   return (
     
-    <BrowserRouter>
-    <h1>Square Loan</h1>
+    <Router>
+     <h1>Square Loan</h1>
       <div>
         <div className="header">
           <NavLink exact activeClassName="active" to="/">Home</NavLink>
@@ -41,14 +42,21 @@ function App() {
           <NavLink activeClassName="active" to="/Dashboard">Dashboard</NavLink><small>(Access with token only)</small>
         </div>
         <div className="content">
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <PublicRoute path="/Login" component={Login} />
-            <PrivateRoute path="/Dashboard" component={Dashboard} />
-          </Switch>
+          <Routes>
+            <Route exact path="/" element={Home}>
+              
+            </Route>
+            <Route path="/Login" element={PrivateRoute}>
+               <Route path ="/Login" element={Login}/>
+            </Route>
+
+            <Route path="/Dashboard" element={PublicRoute}>
+               <Route path ="/Dashboard" element={Login}/>
+            </Route>
+          </Routes>
         </div>
       </div>
-    </BrowserRouter>
+    </Router>
   );
 }
 
