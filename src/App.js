@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Switch, Route, NavLink } from 'react-router-dom';
 import './App.css';
 import PrivateRoute from './Utils/PrivateRoute';
+import axios from 'axios';
 import PublicRoute from './Utils/PublicRoute';
 import Login from './Login';
 import Dashboard from './Dashboard';
