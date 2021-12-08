@@ -1,9 +1,15 @@
 import React from 'react';
+import { getUser, removeUserSession } from './Utils/Common';
 
 function Dashboard(props) {
+    const user = getUser();
+
+
     const handleLogout = () =>{
+        removeUserSession();
         props.history.push('/login');
     }
+    
     return (
        <div>
            Welcome Admin!<br /><br/>
